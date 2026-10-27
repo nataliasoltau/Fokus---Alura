@@ -18,7 +18,7 @@ const audioPlay = new Audio("/sons/play.wav");
 const audioPause = new Audio("/sons/pause.mp3");
 const tempoAcabou = new Audio("/sons/beep.mp3");
 
-let tempoDecorridoEmSegundos = 1500; // 25 minutos
+let tempoDecorridoEmSegundos = 15; // 25 minutos
 let intervaloId = null;
 
 musica.loop = true;
@@ -34,7 +34,7 @@ musicaFocoInput.addEventListener("change", () => {
 
 // Adiciona evento de troca de fundo nos botoes
 focoBt.addEventListener("click", () => {
-  tempoDecorridoEmSegundos = 1500; // 25 minutos
+  tempoDecorridoEmSegundos = 15; // 25 minutos
   alterarContexto("foco");
   focoBt.classList.add("active");
 });
@@ -84,8 +84,13 @@ function alterarContexto(contexto) {
 // Adiciona evento de contagem regressiva
 const contagemRegressiva = () => {
   if (tempoDecorridoEmSegundos <= 0) {
-    tempoAcabou.play();
+    //tempoAcabou.play();
     alert("Tempo finalizado");
+    const focoAtivo = html.getAttribute("data-contexto") == "foco";
+    if (focoAtivo) {
+      const evento = new CustomEvent("FocoFinalizado");
+      document.dispatchEvent(evento);
+    }
     zerar();
     return;
   }
